@@ -1,6 +1,40 @@
 import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 import datetime as dt
 from datetime import timedelta
+
+
+
+def dibuixar_countplot_amb_valors(data, column, ax, title, palette, percentage=True):
+    """
+    Plota un countplot amb comptatges i percentatges opcionals.
+
+    Paràmetres:
+    data (DataFrame): El conjunt de dades que conté la columna a plotejar.
+    column (str): El nom de la columna que es vol plotejar.
+    ax (Axes): Els eixos en els quals es plotejarà el gràfic.
+    title (str): El títol del gràfic.
+    percentage (bool): Si és True, es mostren comptatges i percentatges. Si és False, només es mostren comptatges. Valor per defecte és True.
+
+    Exemple d'ús:
+    fig, ax = plt.subplots()
+    plot_countplot_with_counts_and_percentages(data=df, column='columna', ax=ax, title='Títol del Gràfic', palette=palette, percentage=True)
+    plt.show()
+    """
+    total = len(data)
+    sns.countplot(y=column, data=data, order=data[column].value_counts().index, ax=ax, palette=palette)
+    for p in ax.patches:
+        width = p.get_width()
+        if percentage:
+            percent_text = f' ({(width / total) * 100:.1f}%)'
+        else:
+            percent_text = ''
+        ax.text(width + 1, p.get_y() + p.get_height() / 2, f'{int(width)}{percent_text}', ha='left', va='center')
+    ax.set_title(title)
 
 
 
